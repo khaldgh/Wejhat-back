@@ -19,16 +19,25 @@ import { UsersFavoritesModule } from './users-favorites/users-favorites.module';
 import { SubcategoriesController } from './subcategories/subcategories.controller';
 import { SubcategoriesService } from './subcategories/subcategories.service';
 import { SubcategoriesModule } from './subcategories/subcategories.module';
-import dbConfig from 'ormconfig';
+// import dbConfig from 'ormconfig';
 const cookieSession = require('cookie-session');
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      // envFilePath: `.env`,
+      envFilePath: `.env`,
     }),
-    TypeOrmModule.forRoot(dbConfig),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      database: 'new_schema',
+      entities: ['**/*.entity.js'],
+      username: 'root',
+      password: 'Password',
+      host: 'localhost',
+      port: 3306,
+      logging: true,
+    }),
     UsersModule,
     PlacesModule,
     CategoriesModule,

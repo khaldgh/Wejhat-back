@@ -5,9 +5,9 @@ import { User } from './user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { CurrentUserMiddleware } from './middlewares/current-user.middleware';
-import { GoogleStrategy } from 'src/users/strategies/google.strategy';
-import { FacebookStrategy } from 'src/users/strategies/facebook.strategy';
-import { TwitterStrategy } from './strategies/twitter.startegy';
+// import { GoogleStrategy } from 'src/users/strategies/google.strategy';
+// import { FacebookStrategy } from 'src/users/strategies/facebook.strategy';
+// import { TwitterStrategy } from './strategies/twitter.startegy';
 import { Admin } from './admin.entity';
 import { Owner } from './owner.entity';
 import { PlacesModule } from 'src/places/places.module';
@@ -20,9 +20,9 @@ import { UsersFavorites } from 'src/users-favorites/users_favorites.entity';
   providers: [
     UsersService,
     AuthService,
-    GoogleStrategy,
-    FacebookStrategy,
-    TwitterStrategy,
+    // GoogleStrategy,
+    // FacebookStrategy,
+    // TwitterStrategy,
   ],
   exports: [UsersService]
 })

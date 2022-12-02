@@ -2,15 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { City } from 'src/cities/city.entity';
 import { AppDataSource } from 'src/datasource';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
 export class CitiesService {
-  constructor(@InjectRepository(City) private repo: Repository<City>) {}
+  // constructor(@InjectRepository(City) private repo: Repository<City>) {}
+  constructor(private dataSource: DataSource){}
 
 
   async getCities() {
-    return AppDataSource.manager.find(City)
+    return this.dataSource.manager.find(City)
     //  this.repo.find();
   }
 
