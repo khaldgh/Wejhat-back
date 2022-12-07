@@ -1,6 +1,7 @@
 
 # .env
 # ormconfig.js
+.aws
 
 # compiled output
 /dist
