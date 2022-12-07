@@ -19,6 +19,7 @@ import { UsersFavoritesModule } from './users-favorites/users-favorites.module';
 import { SubcategoriesController } from './subcategories/subcategories.controller';
 import { SubcategoriesService } from './subcategories/subcategories.service';
 import { SubcategoriesModule } from './subcategories/subcategories.module';
+import { typeOrmAsyncConfig } from 'typeorm.config';
 // import dbConfig from 'ormconfig';
 const cookieSession = require('cookie-session');
 
@@ -28,16 +29,7 @@ const cookieSession = require('cookie-session');
       isGlobal: true,
       envFilePath: `.env`,
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      database: 'new_schema',
-      entities: ['**/*.entity.js'],
-      username: 'root',
-      password: 'Password',
-      host: 'localhost',
-      port: 3306,
-      logging: true,
-    }),
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     UsersModule,
     PlacesModule,
     CategoriesModule,
