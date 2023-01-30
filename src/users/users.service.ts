@@ -25,16 +25,19 @@ export class UsersService {
   ) {}
 
   async findOne(id: number) {
-  //   if (!id) {
-  //     return null;
-  //   }
-  //   return this.repo.findOne(id);
-  // }
+    if (!id) {
+      return null;
+    }
+    return this.repo.findOneBy({user_id: id});
+  }
 
-  // async find(email: string) {
-  //   console.log(await this.repo.find({ email }));
-  //   const user = await this.repo.find({ email });
-  //   return user;
+  async find(email: string) {
+    const user = await this.repo.find({
+      where: {
+        email: email
+      }
+    });
+    return user;
   }
 
   async create(body: SignupUserDto) {

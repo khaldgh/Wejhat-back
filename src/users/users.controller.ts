@@ -87,33 +87,34 @@ export class UsersController {
   @Serialize(SignupUserDto)
   async sendUser(@Body() body: SignupUserDto, @Session() session: any) {
     // console.log(body);
-    // const user = await this.authService.signup(
-    //   body.email,
-    //   body.username,
-    //   body.password,
-    // );
-    // session.userId = user.user_id;
-    // console.log(session.userId);
-    // return user;
+    console.log(session);
+    const user = await this.authService.signup(
+      body.email,
+      body.username,
+      body.password,
+    );
+    session.userId = user.user_id;
+    console.log(session.userId);
+    return user;
   }
 
   @Post('/signin')
   @Serialize(SigninUserDto)
   async signin(@Body() body: SigninUserDto, @Session() session: any) {
-  //   const user = await this.authService.signin(body.email, body.password);
-  //   session.userId = user.user_id;
-  //   console.log(session);
-  //   return user;
-  // }
-  // @Post('/signout')
-  // @Serialize(UserDto)
-  // @UseGuards(AuthGuard)
-  // async signout(@Session() session: any) {
-  //   // console.log(session.userId);
-  //   if (!session.userId) {
-  //     throw new NotFoundException('user not found');
-  //   }
-  //   session.userId = null;
+    const user = await this.authService.signin(body.email, body.password);
+    session.userId = user.user_id;
+    console.log(session);
+    return user;
+  }
+  @Post('/signout')
+  @Serialize(UserDto)
+  @UseGuards(AuthGuard)
+  async signout(@Session() session: any) {
+    // console.log(session.userId);
+    if (!session.userId) {
+      throw new NotFoundException('user not found');
+    }
+    session.userId = null;
   }
 
   @Get('/google')
