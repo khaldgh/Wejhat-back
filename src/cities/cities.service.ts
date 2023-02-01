@@ -12,7 +12,7 @@ export class CitiesService {
 
   async getCities() {
     // return this.dataSource.manager.find(City)
-     this.repo.find();
+     return this.repo.find();
   }
 
   

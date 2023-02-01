@@ -28,9 +28,24 @@ const cookieSession = require('cookie-session');
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env`,
+      envFilePath: '.env.development',
     }),
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: function (configService: ConfigService) {
+        console.log(configService.get('password'))
+        return ({
+          type: 'mysql',
+          host: configService.get('HOST'),
+          port: +configService.get('PORT'),
+          username: configService.get('USERNAME'),
+          password: configService.get('PASSWORD'),
+          database: configService.get('DATABASE'),
+          entities: ['**/*.js'],
+        });
+      },
+      inject: [ConfigService]
+    }),
     UsersModule,
     PlacesModule,
     CategoriesModule,
