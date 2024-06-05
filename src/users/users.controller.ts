@@ -13,14 +13,17 @@ import {
   Patch,
   Put,
   Delete,
+  Redirect,
+  Res,
 } from '@nestjs/common';
 // import { parse } from 'path/posix';
+import { Response } from 'express';
 import { SignupUserDto } from './dtos/signup_user.dto';
 import { SigninUserDto } from './dtos/signin_user.dto';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { Serialize } from '../interceptors/serialize.interceptor';
-import { AuthService } from './auth.service';
+// import { AuthService } from './auth.service';
 import { currentUser } from './decorators/current-user.decorator';
 import { AuthGuard } from '../guards/auth.guard';
 import * as passport from '@nestjs/passport';
@@ -33,7 +36,7 @@ import { UserDto } from './dtos/user.dto';
 export class UsersController {
   constructor(
     private usersService: UsersService,
-    private authService: AuthService,
+    // private authService: AuthService,
   ) {}
 
   @Get('/whoami')
@@ -44,7 +47,7 @@ export class UsersController {
     return user;
   }
 
-  @Post('preferences')
+  @Post('/preferences')
   async setPreferences(
     @currentUser() user: User,
     @Body() categories: Category[],
@@ -52,10 +55,10 @@ export class UsersController {
     return await this.usersService.setPreferences(user, categories);
   }
 
-  @Get('preferences')
+  @Get('/preferences')
   async getPreferences(@currentUser() user: User) {
     return await this.usersService.getPreferences(user);
-    // console.log(user.Categories); 
+    // console.log(user.Categories);
   }
 
   @Serialize(UsersFavoriteDto)
@@ -78,7 +81,7 @@ export class UsersController {
     // return this.usersService.find(email);
   }
 
-  @Patch('make-admin')
+  @Patch('/make-admin')
   async makeAdmin(@currentUser() user: User, @Session() session: any) {
     return this.usersService.makeAdmin(user, session);
   }
@@ -88,7 +91,7 @@ export class UsersController {
   async sendUser(@Body() body: SignupUserDto, @Session() session: any) {
     // console.log(body);
     console.log(session);
-    const user = await this.authService.signup(
+    const user = await this.usersService.signup(
       body.email,
       body.username,
       body.password,
@@ -101,9 +104,8 @@ export class UsersController {
   @Post('/signin')
   @Serialize(SigninUserDto)
   async signin(@Body() body: SigninUserDto, @Session() session: any) {
-    const user = await this.authService.signin(body.email, body.password);
+    const user = await this.usersService.signin(body.email, body.password);
     session.userId = user.user_id;
-    console.log(session);
     return user;
   }
   @Post('/signout')
@@ -115,6 +117,21 @@ export class UsersController {
       throw new NotFoundException('user not found');
     }
     session.userId = null;
+  }
+
+  @Post('/forgot-password')
+  async confirmEmailForPasswordReset(@Query() email: string) {
+    return this.usersService.confirmEmailForPasswordReset(email);
+  }
+
+  @Get('/forgot-password/:token')
+  async confirmTokenLink(@Param('token') token: string, @Res() res: Response){
+    return this.usersService.confirmTokenLink(token, res)
+  }
+
+  @Post('/reset-password')
+  resetPassword(@Body() body: UserDto ) {
+    return this.usersService.passwordReset(body.email, body.password);
   }
 
   @Get('/google')
@@ -182,6 +199,16 @@ export class UsersController {
       message: 'User info from instagram',
       user: req.user,
     };
+  }
+
+  @Get('/sendMailer')
+  sendMailer(@Res() response: any){
+    const mail = this.usersService.sendMail();
+
+    return response.status(200).json({
+      message: 'success',
+      mail,
+    });
   }
 
   // @Get('users-preferences')

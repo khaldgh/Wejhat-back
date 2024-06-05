@@ -51,8 +51,8 @@ export class CreatePlaceDto {
   @Type(() => PlaceCateogryDto)
   category: PlaceCateogryDto
 
-  @IsArray()
-  subcategories: Subcategory[];
+  // @IsArray()
+  // subcategories: Subcategory[];
   
   @IsArray()
   neighborhoods: Neighborhood[]

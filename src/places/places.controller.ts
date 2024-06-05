@@ -97,6 +97,7 @@ export class PlacesController {
 
   @Get('/favorite-places')
   async getFavoritePlaces(@currentUser() user: User){
+    console.log(user)
     return this.placesService.getFavoritePlaces(user.user_id);
   }
 

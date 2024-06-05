@@ -25,7 +25,7 @@ export class PlacesService {
   ) {
     const place = this.repo.create(createPlaceDto);
     place.neighborhoods = place.neighborhoods
-    place.subcategories = createPlaceDto.subcategories;
+    // place.subcategories = createPlaceDto.subcategories;
     place.creatorId = user;
     await this.repo.save(place).finally(() => {
       this.plcId = place.place_id;
@@ -149,7 +149,7 @@ export class PlacesService {
     place.category = category;
     place.neighborhoods = neighborhoods;
     place.approved = true;
-    console.log(place);
+    // console.log(place);
 
     await this.repo.save(place);
 
@@ -164,9 +164,9 @@ export class PlacesService {
       )
       .innerJoin('category', 'c', 'c.category_id = categoryCategoryId')
       .innerJoin('user', 'u')
-      .innerJoin('users_Favorites', 'uf', `uf.userUserId = userId, ${userId}`)
+      .innerJoin('users_Favorites', 'uf', `uf.userUserId = u.user_id`)
       .where('place_id = placePlaceId')
-      .andWhere('approved = 1')
+      .andWhere(`approved = 1`)
       .andWhere('user_id = :userId', {userId})
       .orderBy('creationDate', 'DESC')
       .getRawMany();
@@ -498,7 +498,7 @@ export class PlacesService {
         'place_id,title, description,approved,phone,website,instagram,Sunday,monday,tuesday,wednesday,thursday,friday,saturday, categoryCategoryId, email',
       )
       .innerJoin('user', 'u', 'u.user_id = creatorIdUserId')
-      .where('approved = 1')
+      .where('approved = 0')
       .orderBy('place_id', 'ASC')
       .getRawMany();
 
@@ -536,7 +536,6 @@ export class PlacesService {
             : 0;
         }
         place.categories = newCategory;
-        place.approved = true
         this.repo.save(place);
       });
 

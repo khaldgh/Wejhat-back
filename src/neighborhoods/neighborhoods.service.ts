@@ -6,18 +6,18 @@ import { NeighborhoodDto } from './neighborhood.dto';
 
 @Injectable()
 export class NeighborhoodsService {
-  // constructor(
-  //   @InjectRepository(Neighborhood) private repo: Repository<Neighborhood>
-  // ) {}
-  constructor(private dataSource: DataSource){}
+  constructor(
+    @InjectRepository(Neighborhood) private repo: Repository<Neighborhood>
+  ) {}
+  // constructor(private dataSource: DataSource){}
 
 
   async getNeighborhoods() {
-    this.dataSource.manager.find(Neighborhood);
+    this.repo.find();
   }
   
   async neighborhoodQuery({ city_id }: NeighborhoodDto) {
-    return this.dataSource.manager
+    return this.repo
       .createQueryBuilder()
       .select('neighborhood_id, neighborhood')
       .where('cityCityId = :city_id', { city_id } )

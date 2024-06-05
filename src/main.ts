@@ -1,3 +1,5 @@
+import { config } from 'dotenv';
+config()
 import { NestFactory } from '@nestjs/core';
 const helmet = require('helmet');
 import { AppModule } from './app.module';

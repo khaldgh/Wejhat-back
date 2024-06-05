@@ -6,8 +6,8 @@ import { NeighborhoodsService } from './neighborhoods.service';
 export class NeighborhoodsController {
     constructor(private neighborhoodsService: NeighborhoodsService){}
 
-    @Get('/:param')
-    neighborhoodQuery(@Param('param') param: NeighborhoodDto){
-        return this.neighborhoodsService.neighborhoodQuery(param);
+    @Get()
+    neighborhoodQuery(@Query() query: NeighborhoodDto){
+        return this.neighborhoodsService.neighborhoodQuery(query);
     }
 }
